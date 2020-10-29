@@ -20,6 +20,8 @@ if [[ ${#commands[@]} -gt 1 ]] ; then
   exit 1
 fi
 
+[[ -n "$(plugin_read_list WRAP_COMMAND)" ]] && commands+=("WRAP_COMMAND")
+# TODO: check for wrap_command with run
 [[ -n "$(plugin_read_list PUSH)" ]] && commands+=("PUSH")
 
 # Don't convert paths on gitbash on windows
@@ -43,6 +45,12 @@ if in_array "RUN" "${commands[@]}" ; then
   . "$DIR/../lib/run.bash"
   # shellcheck source=commands/run.sh
   . "$DIR/../commands/run.sh"
+fi
+if in_array "WRAP_COMMAND" "${commands[@]}" ; then
+  # shellcheck source=lib/wrap_command.bash
+  . "$DIR/../lib/wrap_command.bash"
+  # shellcheck source=commands/wrap_command.sh
+  . "$DIR/../commands/wrap_command.sh"
 fi
 if in_array "PUSH" "${commands[@]}" ; then
   # shellcheck source=lib/push.bash
