@@ -76,6 +76,8 @@ configuration:
       type: boolean
     entrypoint:
       type: string
+    wrap_command:
+      type: boolean
   oneOf:
     - required:
       - run
@@ -83,6 +85,8 @@ configuration:
       - build
     - required:
       - push
+    - required:
+      - wrap_command
   additionalProperties: false
   dependencies:
     pull: [ run ]
