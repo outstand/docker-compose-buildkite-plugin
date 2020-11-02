@@ -2,6 +2,7 @@
 
 load '/usr/local/lib/bats/load.bash'
 load '../lib/shared'
+load '../lib/run'
 load '../lib/wrap_command'
 
 # export DOCKER_COMPOSE_STUB_DEBUG=/dev/tty

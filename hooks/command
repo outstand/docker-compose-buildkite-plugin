@@ -47,6 +47,8 @@ if in_array "RUN" "${commands[@]}" ; then
   . "$DIR/../commands/run.sh"
 fi
 if in_array "WRAP_COMMAND" "${commands[@]}" ; then
+  # shellcheck source=lib/run.bash
+  . "$DIR/../lib/run.bash"
   # shellcheck source=lib/wrap_command.bash
   . "$DIR/../lib/wrap_command.bash"
   # shellcheck source=commands/wrap_command.sh
