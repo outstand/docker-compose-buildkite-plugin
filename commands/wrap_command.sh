@@ -18,9 +18,8 @@ test -f "$override_file" && rm "$override_file"
 
 run_params=()
 pull_params=()
-up_params=()
 pull_services=()
-prebuilt_candidates=("$run_service")
+prebuilt_candidates=()
 
 # Build a list of services that need to be pulled down
 while read -r name ; do
@@ -55,9 +54,8 @@ done
 if [[ ${#prebuilt_services[@]} -gt 0 ]] ; then
   echo "~~~ :docker: Creating docker-compose override file for prebuilt services"
   build_image_override_file "${prebuilt_service_overrides[@]}" | tee "$override_file"
-  run_params+=(-f "$override_file")
   pull_params+=(-f "$override_file")
-  up_params+=(-f "$override_file")
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE=$override_file
 fi
 
 # If there are multiple services to pull, run it in parallel (although this is now the default)
@@ -98,17 +96,6 @@ if [[ "${BUILDKITE_PLUGIN_DOCKER_COMPOSE_REQUIRE_PREBUILD:-}" =~ ^(true|on|1)$ ]
   echo "The step specified that it was required"
   exit 1
 
-elif [[ ! -f "$override_file" ]]; then
-  echo "~~~ :docker: Building Docker Compose Service: $run_service" >&2
-  echo "⚠️ No pre-built image found from a previous 'build' step for this service and config file. Building image..."
-
-  # Ideally we'd do a pull with a retry first here, but we need the conditional pull behaviour here
-  # for when an image and a build is defined in the docker-compose.ymk file, otherwise we try and
-  # pull an image that doesn't exist
-  run_docker_compose build "${build_params[@]}" "$run_service"
-
-  # Sometimes docker-compose pull leaves unfinished ansi codes
-  echo
 fi
 
 # Assemble the shell and command arguments into the docker arguments
@@ -126,7 +113,13 @@ set +e
 
 (
   echo "+++ :docker: Running ${display_command[*]:-}" >&2
-  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE=$override_file
+
+  if [[ -n "${BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE:-}" ]] ; then
+    export BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE=$BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE
+  fi
+
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CONTAINER_PREFIX="$(docker_compose_project_name)_build_${BUILDKITE_BUILD_NUMBER}"
+
   plugin_prompt_and_run "${run_params[@]}"
 )
 
