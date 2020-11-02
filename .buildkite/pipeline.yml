@@ -40,6 +40,14 @@ steps:
     concurrency: 1
     concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
+  - label: wrap_command, with links that fail
+    command: tests/scripts/wrap_with_failure.sh
+    plugins:
+      ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
+        wrap_command: true
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
+
   - label: run, with environment
     plugins:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
