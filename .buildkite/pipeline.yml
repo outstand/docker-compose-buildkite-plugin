@@ -153,6 +153,7 @@ steps:
     command: tests/scripts/hello_world.sh
     plugins:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
+        wrap_command: true
         require-prebuild: true
     concurrency: 1
     concurrency_group: docker-compose-buildkite-plugin/registry-specs
