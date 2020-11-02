@@ -12,7 +12,7 @@ echo "--- Saying hello"
 docker-compose \
   -f tests/composefiles/docker-compose.v2.1.yml \
   -p ${BUILDKITE_PLUGIN_DOCKER_COMPOSE_PROJECT_NAME} \
+  run \
   --name ${BUILDKITE_PLUGIN_DOCKER_COMPOSE_CONTAINER_PREFIX}_alpinewithfailinglink \
   --rm \
-  run \
   alpinewithfailinglink /bin/sh -e -c 'echo hello from alpine'
