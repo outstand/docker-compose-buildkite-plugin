@@ -146,6 +146,17 @@ steps:
     concurrency: 1
     concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
+  - label: wrap_command after prebuild
+    depends_on: prebuild-2-1-build-image-repo
+    env:
+      RESTORE_REGISTRY_FROM: prebuild-2-1-build-image-repo
+    command: tests/scripts/hello_world.sh
+    plugins:
+      ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
+        require-prebuild: true
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
+
   - label: prebuild with custom image-name
     key: prebuild-custom-image-name
     env:
