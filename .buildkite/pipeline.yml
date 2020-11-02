@@ -154,6 +154,7 @@ steps:
     plugins:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
         wrap_command: true
+        pull: helloworldimage
         require-prebuild: true
     concurrency: 1
     concurrency_group: docker-compose-buildkite-plugin/registry-specs
