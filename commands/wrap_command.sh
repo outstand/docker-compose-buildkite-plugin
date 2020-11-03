@@ -72,13 +72,6 @@ if [[ ${#pull_services[@]} -gt 0 ]] ; then
   echo
 fi
 
-# # append env vars provided in ENV or ENVIRONMENT, these are newline delimited
-# while IFS=$'\n' read -r env ; do
-#   [[ -n "${env:-}" ]] && run_params+=("-e" "${env}")
-# done <<< "$(printf '%s\n%s' \
-#   "$(plugin_read_list ENV)" \
-#   "$(plugin_read_list ENVIRONMENT)")"
-
 build_params=(--pull)
 
 if [[ "$(plugin_read_config NO_CACHE "false")" == "true" ]] ; then
