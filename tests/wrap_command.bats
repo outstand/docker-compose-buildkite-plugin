@@ -50,6 +50,7 @@ load '../lib/wrap_command'
 
   assert_success
   assert_output --partial "Running tests"
+  assert_output --partial "GOT foo"
   assert_output --partial "built myservice"
   assert_output --partial "ran myservice"
   unstub docker-compose
