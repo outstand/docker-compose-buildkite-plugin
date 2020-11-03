@@ -4,6 +4,10 @@ set -euo pipefail
 
 echo "--- Running tests"
 
+if [[ ${1:-} ]] ; then
+  echo "GOT ${1}"
+fi
+
 compose_params=(-f docker-compose.yml)
 if [[ -n "${BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE:-}" ]] ; then
   compose_params+=(-f "${BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE}")
