@@ -94,8 +94,8 @@ fi
 display_command=()
 
 if [[ -n "${BUILDKITE_COMMAND}" ]] ; then
-  run_params+=("${BUILDKITE_COMMAND}")
-  display_command+=("'${BUILDKITE_COMMAND}'")
+  run_params+=(${BUILDKITE_COMMAND})
+  display_command+=("${BUILDKITE_COMMAND}")
 fi
 
 # Disable -e outside of the subshell; since the subshell returning a failure
