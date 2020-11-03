@@ -9,6 +9,7 @@ fi
 
 echo "~~~ Starting test Docker registry"
 name="docker-compose-plugin-registry-${BUILDKITE_JOB_ID//-}"
+mkdir -p "$(pwd)/tmp/registry"
 docker run -d \
   -p 5005:5000 \
   --name ${name} \
