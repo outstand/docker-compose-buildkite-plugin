@@ -95,7 +95,7 @@ display_command=()
 
 if [[ -n "${BUILDKITE_COMMAND}" ]] ; then
   IFS=" " read -r -a command <<< "$BUILDKITE_COMMAND"
-  run_params+=$command
+  run_params+=("${command[@]}")
   display_command+=("${BUILDKITE_COMMAND}")
 fi
 
