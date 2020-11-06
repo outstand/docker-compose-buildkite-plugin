@@ -25,6 +25,9 @@ load '../lib/run'
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
+    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0" \
     "artifact upload : exit 0"
 
   stub docker-compose \
@@ -68,6 +71,9 @@ load '../lib/run'
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
+    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
 
   stub docker-compose \
     "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
@@ -110,6 +116,9 @@ load '../lib/run'
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
+    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
 
   stub docker-compose \
     "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
