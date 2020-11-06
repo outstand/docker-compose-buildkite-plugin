@@ -23,6 +23,11 @@ load '../lib/wrap_command'
     "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
+  stub buildkite-agent \
+    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+
   run $PWD/hooks/command
 
   assert_success
@@ -30,6 +35,7 @@ load '../lib/wrap_command'
   assert_output --partial "built myservice"
   assert_output --partial "ran myservice"
   unstub docker-compose
+  unstub buildkite-agent
 }
 
 @test "Wrap command with spaces" {
@@ -46,6 +52,11 @@ load '../lib/wrap_command'
     "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
+  stub buildkite-agent \
+    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+
   run $PWD/hooks/command
 
   assert_success
@@ -54,6 +65,7 @@ load '../lib/wrap_command'
   assert_output --partial "built myservice"
   assert_output --partial "ran myservice"
   unstub docker-compose
+  unstub buildkite-agent
 }
 
 @test "Wrap command with a prebuilt image" {
@@ -73,7 +85,10 @@ load '../lib/wrap_command'
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
+    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
+    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
+    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
 
   run $PWD/hooks/command
 
