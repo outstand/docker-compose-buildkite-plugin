@@ -14,7 +14,7 @@ commands=()
 [[ -n "$(plugin_read_list RUN)" ]] && commands+=("RUN")
 [[ -n "$(plugin_read_list WRAP_COMMAND)" ]] && commands+=("WRAP_COMMAND")
 
-if [[ ! in_array "RUN" "${commands[@]}" ]] && [[ ! in_array "WRAP_COMMAND" "${commands[@]}" ]]; then
+if ! in_array "RUN" "${commands[@]}" && ! in_array "WRAP_COMMAND" "${commands[@]}" ; then
   exit 0
 fi
 
