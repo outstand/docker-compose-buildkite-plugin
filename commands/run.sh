@@ -301,8 +301,14 @@ if [[ ${#shell[@]} -gt 0 ]] ; then
 fi
 
 if [[ -n "${BUILDKITE_COMMAND}" ]] ; then
-  run_params+=("${BUILDKITE_COMMAND}")
-  display_command+=("'${BUILDKITE_COMMAND}'")
+  if [[ ${#shell[@]} -gt 0 ]] ; then
+    run_params+=("${BUILDKITE_COMMAND}")
+    display_command+=("'${BUILDKITE_COMMAND}'")
+  else
+    IFS=" " read -r -a command <<< "$BUILDKITE_COMMAND"
+    run_params+=("${command[@]}")
+    display_command+=("${BUILDKITE_COMMAND}")
+  fi
 elif [[ ${#command[@]} -gt 0 ]] ; then
   for command_arg in "${command[@]}" ; do
     run_params+=("$command_arg")
