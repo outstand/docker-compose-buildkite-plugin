@@ -72,16 +72,6 @@ if [[ ${#pull_services[@]} -gt 0 ]] ; then
   echo
 fi
 
-build_params=(--pull)
-
-if [[ "$(plugin_read_config NO_CACHE "false")" == "true" ]] ; then
-  build_params+=(--no-cache)
-fi
-
-while read -r arg ; do
-  [[ -n "${arg:-}" ]] && build_params+=("--build-arg" "${arg}")
-done <<< "$(plugin_read_list ARGS)"
-
 if [[ "${BUILDKITE_PLUGIN_DOCKER_COMPOSE_REQUIRE_PREBUILD:-}" =~ ^(true|on|1)$ ]] && [[ ! -f "$override_file" ]] ; then
   echo "+++ 🚨 No pre-built image found from a previous 'build' step for this service and config file."
   echo "The step specified that it was required"
