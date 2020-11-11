@@ -6,6 +6,32 @@ pull_retries="$(plugin_read_config PULL_RETRIES "0")"
 push_retries="$(plugin_read_config PUSH_RETRIES "0")"
 override_file="docker-compose.buildkite-${BUILDKITE_BUILD_NUMBER}-override.yml"
 build_images=()
+run_params=()
+display_command=()
+
+if [[ -n "${BUILDKITE_COMMAND:-}" ]] ; then
+  IFS=" " read -r -a command <<< "$BUILDKITE_COMMAND"
+  run_params+=("${command[@]}")
+  display_command+=("${BUILDKITE_COMMAND}")
+
+  set +e
+
+  (
+    echo "+++ Running ${display_command[*]:-} before building" >&2
+    "${run_params[@]}"
+  )
+
+
+  exitcode=$?
+
+  set -e
+
+  if [[ $exitcode -ne 0 ]] ; then
+    echo "^^^ +++"
+    echo "+++ :warning: Failed to run command, exited with $exitcode, run params:"
+    echo "${run_params[@]}"
+  fi
+fi
 
 service_name_cache_from_var() {
   local service_name="$1"
