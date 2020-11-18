@@ -120,17 +120,6 @@ if [[ $exitcode -ne 0 ]] ; then
   echo "${run_params[@]}"
 fi
 
-# Export metadata values
-compose_config=()
-for file in $(docker_compose_config_files) ; do
-  compose_config+=("$file")
-done
-test -f "$override_file" && compose_config+=("${override_file}")
-buildkite-agent meta-data set "docker-compose-config-files" "${compose_config[@]}"
-buildkite-agent meta-data set "docker-compose-project-name" "$(docker_compose_project_name)"
-buildkite-agent meta-data set "docker-compose-container-prefix" "$(docker_compose_project_name)_build_${BUILDKITE_BUILD_NUMBER}"
-
-
 if [[ -n "${BUILDKITE_AGENT_ACCESS_TOKEN:-}" ]] ; then
   if [[ "$(plugin_read_config CHECK_LINKED_CONTAINERS "true")" != "false" ]] ; then
 

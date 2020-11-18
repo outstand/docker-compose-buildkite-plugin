@@ -23,10 +23,7 @@ load '../lib/run'
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -52,10 +49,7 @@ load '../lib/run'
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -82,10 +76,7 @@ load '../lib/run'
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --workdir=/test_workdir --rm myservice : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -111,10 +102,7 @@ load '../lib/run'
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'sh -c \'echo hello world\'' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -142,10 +130,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'cmd1\ncmd2\ncmd3' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -172,10 +157,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo hello world : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -203,10 +185,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -237,10 +216,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 -e MYENV=0 -e MYENV -e MYENV=2 -e MYENV -e ANOTHER=this\ is\ a\ long\ string\ with\ spaces\;\ and\ semi-colons --rm myservice /bin/sh -e -c 'pwd' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -266,10 +242,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -297,10 +270,7 @@ cmd3"
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -327,10 +297,7 @@ cmd3"
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -357,10 +324,7 @@ cmd3"
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml : echo myimage" \
-    "meta-data set docker-compose-config-files tests/composefiles/docker-compose.v2.0.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml : echo myimage"
 
   run $PWD/hooks/command
 
@@ -388,10 +352,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml-tests/composefiles/docker-compose.v2.1.yml : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml-tests/composefiles/docker-compose.v2.1.yml : echo myimage" \
-    "meta-data set docker-compose-config-files tests/composefiles/docker-compose.v2.0.yml tests/composefiles/docker-compose.v2.1.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml-tests/composefiles/docker-compose.v2.1.yml : echo myimage"
 
   run $PWD/hooks/command
 
@@ -470,10 +431,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -501,10 +459,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -530,10 +485,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -560,10 +512,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -590,10 +539,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -621,10 +567,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -651,10 +594,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -684,10 +624,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -714,10 +651,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -745,10 +679,7 @@ export BUILDKITE_JOB_ID=1111
     "-f llamas1.yml -f llamas2.yml -f llamas3.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice-llamas1.yml-llamas2.yml-llamas3.yml : exit 1" \
-    "meta-data set docker-compose-config-files llamas1.yml llamas2.yml llamas3.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice-llamas1.yml-llamas2.yml-llamas3.yml : exit 1"
 
   run $PWD/hooks/command
 
@@ -774,10 +705,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'pwd' : exit 2"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -808,10 +736,7 @@ export BUILDKITE_JOB_ID=1111
     "meta-data exists docker-compose-plugin-built-image-tag-myservice1 : exit 0" \
     "meta-data get docker-compose-plugin-built-image-tag-myservice1 : echo myimage1" \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice2 : exit 0" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice2 : echo myimage2" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice2 : echo myimage2"
 
   run $PWD/hooks/command
 
@@ -838,10 +763,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --user=1000 myservice /bin/sh -e -c 'sh -c \'whoami\'' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -868,10 +790,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --user=1000:1000 myservice /bin/sh -e -c 'sh -c \'whoami\'' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -899,10 +818,7 @@ export BUILDKITE_JOB_ID=1111
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage" \
-    "meta-data set docker-compose-config-files docker-compose.yml docker-compose.buildkite-1-override.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data get docker-compose-plugin-built-image-tag-myservice : echo myimage"
 
   run $PWD/hooks/command
 
@@ -930,10 +846,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm --entrypoint 'my custom entrypoint' myservice : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -960,10 +873,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm -e BUILDKITE_JOB_ID -e BUILDKITE_BUILD_ID -e BUILDKITE_AGENT_ACCESS_TOKEN -v $BATS_MOCK_TMPDIR/bin/buildkite-agent:/usr/bin/buildkite-agent myservice : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -991,10 +901,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
@@ -1021,10 +928,7 @@ export BUILDKITE_JOB_ID=1111
     "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 -v /tmp/sample-mirror:/tmp/sample-mirror:ro --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-    "meta-data set docker-compose-config-files docker-compose.yml : exit 0" \
-    "meta-data set docker-compose-project-name buildkite1111 : exit 0" \
-    "meta-data set docker-compose-container-prefix buildkite1111_build_1 : exit 0"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   run $PWD/hooks/command
 
