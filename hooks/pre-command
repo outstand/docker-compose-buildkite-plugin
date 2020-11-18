@@ -58,9 +58,13 @@ for file in $(docker_compose_config_files) ; do
   compose_config+=("$file")
 done
 test -f "$override_file" && compose_config+=("${override_file}")
-echo "Setting DOCKER_COMPOSE_CONFIG_FILES=${compose_config[@]}"
-export DOCKER_COMPOSE_CONFIG_FILES="${compose_config[@]}"
+echo "Setting DOCKER_COMPOSE_CONFIG_FILES=${compose_config[*]}"
+export DOCKER_COMPOSE_CONFIG_FILES="${compose_config[*]}"
+
 echo "Setting DOCKER_COMPOSE_PROJECT_NAME=$(docker_compose_project_name)"
-export DOCKER_COMPOSE_PROJECT_NAME="$(docker_compose_project_name)"
+DOCKER_COMPOSE_PROJECT_NAME="$(docker_compose_project_name)"
+export DOCKER_COMPOSE_PROJECT_NAME
+
 echo "Setting DOCKER_COMPOSE_CONTAINER_PREFIX=$(docker_compose_project_name)_build_${BUILDKITE_BUILD_NUMBER}"
-export DOCKER_COMPOSE_CONTAINER_PREFIX="$(docker_compose_project_name)_build_${BUILDKITE_BUILD_NUMBER}"
+DOCKER_COMPOSE_CONTAINER_PREFIX="$(docker_compose_project_name)_build_${BUILDKITE_BUILD_NUMBER}"
+export DOCKER_COMPOSE_CONTAINER_PREFIX
