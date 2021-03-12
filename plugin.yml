@@ -70,6 +70,9 @@ configuration:
       type: boolean
     upload-container-logs:
       type: string
+    always-upload:
+      type: [ string, array ]
+      minimum: 1
     propagate-uid-gid:
       type: boolean
     mount-buildkite-agent:

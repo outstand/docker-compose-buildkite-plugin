@@ -41,6 +41,13 @@ check_linked_containers_and_save_logs() {
   [[ -d "$logdir" ]] && rm -rf "$logdir"
   mkdir -p "$logdir"
 
+  always_upload=()
+  while read -r name ; do
+    if [[ -n "$name" ]] ; then
+      always_upload+=("$name")
+    fi
+  done <<< "$(plugin_read_list ALWAYS_UPLOAD)"
+
   # Get list of container if to service labels
   containers=()
   while IFS=$'\n' read -r container ; do
@@ -64,6 +71,8 @@ check_linked_containers_and_save_logs() {
     if [[ "$service_exit_code" -ne 0 ]] ; then
       echo "+++ :warning: Linked service $service_name exited with $service_exit_code"
       plugin_prompt_and_run docker logs --timestamps --tail 5 "$service_container_id"
+      docker logs -t "$service_container_id" &>"${logdir}/${service_name}.log"
+    elif in_array "$service_name" "${always_upload[@]}"; then
       docker logs -t "$service_container_id" &>"${logdir}/${service_name}.log"
     elif $uploadall; then
       docker logs -t "$service_container_id" &>"${logdir}/${service_name}.log"
