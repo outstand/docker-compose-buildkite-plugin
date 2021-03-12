@@ -23,6 +23,24 @@ load '../lib/shared'
   assert_output --partial "built myservice"
 }
 
+@test "Build with a command" {
+  export BUILDKITE_JOB_ID=1111
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_BUILD=myservice
+  export BUILDKITE_PIPELINE_SLUG=test
+  export BUILDKITE_BUILD_NUMBER=1
+  export BUILDKITE_COMMAND="echo command"
+
+  stub docker-compose \
+    "-f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice"
+
+  run $PWD/hooks/command
+
+  unstub docker-compose
+  assert_success
+  assert_output --partial "Running echo command before building"
+  assert_output --partial "built myservice"
+}
+
 @test "Build with no-cache" {
   export BUILDKITE_JOB_ID=1111
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_BUILD=myservice

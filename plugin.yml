@@ -70,9 +70,14 @@ configuration:
       type: boolean
     upload-container-logs:
       type: string
+    always-upload:
+      type: [ string, array ]
+      minimum: 1
     propagate-uid-gid:
       type: boolean
     mount-buildkite-agent:
+      type: boolean
+    wrap_command:
       type: boolean
   oneOf:
     - required:
@@ -81,6 +86,8 @@ configuration:
       - build
     - required:
       - push
+    - required:
+      - wrap_command
   additionalProperties: false
   dependencies:
     pull: [ run ]

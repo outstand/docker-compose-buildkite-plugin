@@ -67,7 +67,7 @@ load '../lib/run'
 
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   stub docker-compose \
     "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
@@ -109,7 +109,7 @@ load '../lib/run'
 
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   stub docker-compose \
     "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
