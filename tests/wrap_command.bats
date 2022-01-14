@@ -5,7 +5,7 @@ load '../lib/shared'
 load '../lib/run'
 load '../lib/wrap_command'
 
-# export DOCKER_COMPOSE_STUB_DEBUG=/dev/tty
+# export DOCKER_STUB_DEBUG=/dev/tty
 # export BUILDKITE_AGENT_STUB_DEBUG=/dev/tty
 # export BATS_MOCK_TMPDIR=$PWD
 
@@ -18,10 +18,10 @@ load '../lib/wrap_command'
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CHECK_LINKED_CONTAINERS=false
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CLEANUP=false
 
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
-    "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
+  stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   run $PWD/hooks/command
 
@@ -29,7 +29,7 @@ load '../lib/wrap_command'
   assert_output --partial "Running tests"
   assert_output --partial "built myservice"
   assert_output --partial "ran myservice"
-  unstub docker-compose
+  unstub docker
 }
 
 @test "Wrap command with spaces" {
@@ -41,10 +41,10 @@ load '../lib/wrap_command'
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CHECK_LINKED_CONTAINERS=false
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CLEANUP=false
 
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
-    "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
+  stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   run $PWD/hooks/command
 
@@ -53,7 +53,7 @@ load '../lib/wrap_command'
   assert_output --partial "GOT foo"
   assert_output --partial "built myservice"
   assert_output --partial "ran myservice"
-  unstub docker-compose
+  unstub docker
 }
 
 @test "Wrap command with a prebuilt image" {
@@ -66,10 +66,10 @@ load '../lib/wrap_command'
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CLEANUP=false
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_PULL_0=myservice
 
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml pull myservice : echo pulled myservice" \
-    "-f docker-compose.yml -f docker-compose.buildkite-1-override.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -f docker-compose.buildkite-1-override.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
+  stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml pull myservice : echo pulled myservice" \
+    "compose -f docker-compose.yml -f docker-compose.buildkite-1-override.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -f docker-compose.buildkite-1-override.yml -p buildkite1111 run --name buildkite1111_build_1_myservice --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 
   stub buildkite-agent \
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 0" \
@@ -81,6 +81,6 @@ load '../lib/wrap_command'
   assert_output --partial "Running tests"
   assert_output --partial "pulled myservice"
   assert_output --partial "ran myservice"
-  unstub docker-compose
+  unstub docker
   unstub buildkite-agent
 }
