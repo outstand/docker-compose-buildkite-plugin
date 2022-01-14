@@ -118,7 +118,10 @@ run_docker_compose -f "$override_file" build "${build_params[@]}" "${services[@]
 
 if [[ -n "$image_repository" ]] ; then
   echo "~~~ :docker: Pushing built images to $image_repository"
-  retry "$push_retries" run_docker_compose -f "$override_file" push "${services[@]}"
+  # retry "$push_retries" run_docker_compose -f "$override_file" push "${services[@]}"
+
+  # TODO: Use raw `docker push` here as compose v2 seems to run some aggressive validations
+  # before doing anything.
 
   # iterate over build images
   while [[ ${#build_images[@]} -gt 0 ]] ; do
