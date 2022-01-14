@@ -42,7 +42,7 @@ services:
       MYSQL_PASSWORD: blah
       MYSQL_ROOT_PASSWORD: blah
       MYSQL_USER: blah
-    image: mysql:5.6
+    image: mysql:5.7
     ports:
     - target: '3306'
     - published: '3306'

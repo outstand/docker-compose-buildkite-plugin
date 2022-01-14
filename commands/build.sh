@@ -88,7 +88,7 @@ for service_name in $(plugin_read_list BUILD) ; do
 done
 
 if [[ ${#build_images[@]} -gt 0 ]] ; then
-  echo "~~~ :docker: Creating a modified docker-compose config"
+  echo "~~~ :docker: Creating a modified docker compose config"
   build_image_override_file "${build_images[@]}" | tee "$override_file"
 fi
 

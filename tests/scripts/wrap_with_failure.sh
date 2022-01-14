@@ -3,14 +3,14 @@
 set -euo pipefail
 
 echo "--- Starting Dependencies"
-docker-compose \
+docker compose \
   -f tests/composefiles/docker-compose.v2.1.yml \
   -p ${BUILDKITE_PLUGIN_DOCKER_COMPOSE_PROJECT_NAME} \
   up -d --scale alpinewithfailinglink=0 \
   alpinewithfailinglink 
 
 echo "--- Saying hello"
-docker-compose \
+docker compose \
   -f tests/composefiles/docker-compose.v2.1.yml \
   -p ${BUILDKITE_PLUGIN_DOCKER_COMPOSE_PROJECT_NAME} \
   run \

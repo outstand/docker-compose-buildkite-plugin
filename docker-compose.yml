@@ -1,6 +1,6 @@
 version: '2'
 services:
   tests:
-    image: buildkite/plugin-tester
+    image: 786715713882.dkr.ecr.us-east-1.amazonaws.com/bats:latest
     volumes:
       - ".:/plugin"
