@@ -112,56 +112,16 @@ function docker_compose_config_files() {
   done
 }
 
-# Returns the version from the output of docker_compose_config
-function docker_compose_config_version() {
-  IFS=$'\n' read -r -a config <<< "$(docker_compose_config_files)"
-  awk '/^\s*version:/ { print $2; }' < "${config[0]}" | sed "s/[\"']//g"
-}
-
-# Build an docker-compose file that overrides the image for a set of
-# service and image pairs
+# Build an docker-compose file that overrides the image for a
+# set of [ service, image, cache_from ] tuples
 function build_image_override_file() {
-  build_image_override_file_with_version \
-    "$(docker_compose_config_version)" "$@"
-}
-
-# Checks that a specific version of docker-compose supports cache_from
-function docker_compose_supports_cache_from() {
-  local version="$1"
-  if [[ -z "$version" || "$version" == 1* || "$version" =~ ^(2|3)(\.[01])?$ ]] ; then
-    return 1
-  fi
-}
-
-# Build an docker-compose file that overrides the image for a specific
-# docker-compose version and set of [ service, image, cache_from ] tuples
-function build_image_override_file_with_version() {
-  local version="$1"
-
-  if [[ -z "$version" ]]; then
-    echo "The 'build' option can only be used with Compose file versions 2.0 and above."
-    echo "For more information on Docker Compose configuration file versions, see:"
-    echo "https://docs.docker.com/compose/compose-file/compose-versioning/#versioning"
-    exit 1
-  fi
-
-  printf "version: '%s'\\n" "$version"
   printf "services:\\n"
 
-  shift
   while test ${#} -gt 0 ; do
     printf "  %s:\\n" "$1"
     printf "    image: %s\\n" "$2"
 
     if [[ -n "$3" ]] ; then
-      if ! docker_compose_supports_cache_from "$version" ; then
-        echo "Unsupported Docker Compose config file version: $version"
-        echo "The 'cache_from' option can only be used with Compose file versions 2.2 or 3.2 and above."
-        echo "For more information on Docker Compose configuration file versions, see:"
-        echo "https://docs.docker.com/compose/compose-file/compose-versioning/#versioning"
-        exit 1
-      fi
-
       printf "    build:\\n"
       printf "      cache_from:\\n"
       printf "        - %s\\n" "$3"
