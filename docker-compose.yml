@@ -1,6 +1,6 @@
 version: '2'
 services:
   tests:
-    image: 786715713882.dkr.ecr.us-east-1.amazonaws.com/bats:latest
+    image: public.ecr.aws/a5k7g6j4/bats:latest
     volumes:
       - ".:/plugin"
