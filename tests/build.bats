@@ -102,7 +102,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice"
@@ -128,7 +128,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice" \
@@ -157,9 +157,9 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : exit 1" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : exit 1" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : exit 1" \
+    "push my.repository/llamas:test-myservice-build-1 : exit 1" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice"
@@ -184,7 +184,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f tests/composefiles/docker-compose.v2.0.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f tests/composefiles/docker-compose.v2.0.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice"
@@ -210,7 +210,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f tests/composefiles/docker-compose.v2.0.yml -f tests/composefiles/docker-compose.v2.1.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f tests/composefiles/docker-compose.v2.0.yml -f tests/composefiles/docker-compose.v2.1.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v2.0.yml-tests/composefiles/docker-compose.v2.1.yml my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice"
@@ -235,7 +235,8 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1112 -f docker-compose.buildkite-1-override.yml build --pull myservice1 myservice2 : echo built all services" \
-    "compose -f docker-compose.yml -p buildkite1112 -f docker-compose.buildkite-1-override.yml push myservice1 myservice2 : echo pushed all services" \
+    "push my.repository/llamas:test-myservice1-build-1 : echo pushed myservice1" \
+    "push my.repository/llamas:test-myservice2-build-1 : echo pushed myservice2"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice1 my.repository/llamas:test-myservice1-build-1 : echo set image metadata for myservice1" \
@@ -245,24 +246,12 @@ load '../lib/shared'
 
   assert_success
   assert_output --partial "built all services"
-  assert_output --partial "pushed all services"
+  assert_output --partial "pushed myservice1"
+  assert_output --partial "pushed myservice2"
   assert_output --partial "set image metadata for myservice1"
   assert_output --partial "set image metadata for myservice2"
   unstub docker
   unstub buildkite-agent
-}
-
-@test "Build with a docker-compose v1.0 configuration file" {
-  export BUILDKITE_JOB_ID=1112
-  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CONFIG="tests/composefiles/docker-compose.v1.0.yml"
-  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_BUILD_0=helloworld
-  export BUILDKITE_PIPELINE_SLUG=test
-  export BUILDKITE_BUILD_NUMBER=1
-
-  run $PWD/hooks/command
-
-  assert_failure
-  assert_output --partial "Compose file versions 2.0 and above"
 }
 
 @test "Build with a cache-from image" {
@@ -284,6 +273,33 @@ load '../lib/shared'
   assert_output --partial "- my.repository/myservice_cache:latest"
   assert_output --partial "built helloworld"
   unstub docker
+}
+
+@test "Build with a cache-from image and a repository" {
+  export BUILDKITE_JOB_ID=1111
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_BUILD=myservice
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_IMAGE_REPOSITORY=my.repository/llamas
+  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CACHE_FROM=myservice:my.repository/myservice_cache:latest
+  export BUILDKITE_PIPELINE_SLUG=test
+  export BUILDKITE_BUILD_NUMBER=1
+
+  stub docker \
+    "pull my.repository/myservice_cache:latest : echo pulled cache image" \
+    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
+    "push my.repository/llamas:test-myservice-build-1 : echo pushed myservice"
+
+  stub buildkite-agent \
+    "meta-data set docker-compose-plugin-built-image-tag-myservice my.repository/llamas:test-myservice-build-1 : echo set image metadata for myservice"
+
+  run $PWD/hooks/command
+
+  assert_success
+  assert_output --partial "pulled cache image"
+  assert_output --partial "built myservice"
+  assert_output --partial "pushed myservice"
+  assert_output --partial "set image metadata for myservice"
+  unstub docker
+  unstub buildkite-agent
 }
 
 @test "Build with a cache-from image with no-cache also set" {
@@ -430,7 +446,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:my-llamas-image : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice my.repository/llamas:my-llamas-image : echo set image metadata for myservice"
@@ -456,7 +472,7 @@ load '../lib/shared'
 
   stub docker \
     "compose -f tests/composefiles/docker-compose.v3.2.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml build --pull myservice : echo built myservice" \
-    "compose -f tests/composefiles/docker-compose.v3.2.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml push myservice : echo pushed myservice" \
+    "push my.repository/llamas:my-llamas-image : echo pushed myservice"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice-tests/composefiles/docker-compose.v3.2.yml my.repository/llamas:my-llamas-image : echo set image metadata for myservice"
@@ -483,7 +499,8 @@ load '../lib/shared'
 
   stub docker \
     "compose -f docker-compose.yml -p buildkite1112 -f docker-compose.buildkite-1-override.yml build --pull myservice1 myservice2 : echo built all services" \
-    "compose -f docker-compose.yml -p buildkite1112 -f docker-compose.buildkite-1-override.yml push myservice1 myservice2 : echo pushed all services" \
+    "push my.repository/llamas:my-llamas-image-1 : echo pushed myservice1" \
+    "push my.repository/llamas:my-llamas-image-2 : echo pushed myservice2"
 
   stub buildkite-agent \
     "meta-data set docker-compose-plugin-built-image-tag-myservice1 my.repository/llamas:my-llamas-image-1 : echo set image metadata for myservice1" \
@@ -493,7 +510,8 @@ load '../lib/shared'
 
   assert_success
   assert_output --partial "built all services"
-  assert_output --partial "pushed all services"
+  assert_output --partial "pushed myservice1"
+  assert_output --partial "pushed myservice2"
   assert_output --partial "set image metadata for myservice1"
   assert_output --partial "set image metadata for myservice2"
   unstub docker
