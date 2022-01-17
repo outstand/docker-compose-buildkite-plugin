@@ -49,6 +49,5 @@ services:
       target: '3306'
     volumes:
     - /home/blah/blah/db/blah.sql:/docker-entrypoint-initdb.d/blah.sql:rw
-version: '3.2'
 volumes: {}
 
