@@ -8,8 +8,11 @@ if [[ -n "${RESTORE_REGISTRY_FROM:-}" ]]; then
 fi
 
 echo "~~~ Starting test Docker registry"
+name="docker-compose-plugin-registry-${BUILDKITE_JOB_ID//-}"
+mkdir -p "$(pwd)/tmp/registry"
 docker run -d \
   -p 5005:5000 \
-  --name docker-compose-plugin-registry \
+  --name ${name} \
   -v "$(pwd)/tmp/registry:/var/lib/registry" \
+  --user=1000:1000 \
   registry:2

@@ -60,11 +60,8 @@ if [[ ${#prebuilt_services[@]} -gt 0 ]] ; then
   up_params+=(-f "$override_file")
 fi
 
-# If there are multiple services to pull, run it in parallel (although this is now the default)
-if [[ ${#pull_services[@]} -gt 1 ]] ; then
-  pull_params+=("pull" "--parallel" "${pull_services[@]}")
-elif [[ ${#pull_services[@]} -eq 1 ]] ; then
-  pull_params+=("pull" "${pull_services[0]}")
+if [[ ${#pull_services[@]} -gt 0 ]] ; then
+  pull_params+=("pull" "${pull_services[@]}")
 fi
 
 # Pull down specified services
@@ -72,7 +69,7 @@ if [[ ${#pull_services[@]} -gt 0 ]] ; then
   echo "~~~ :docker: Pulling services ${pull_services[0]}"
   retry "$pull_retries" run_docker_compose "${pull_params[@]}"
 
-  # Sometimes docker-compose pull leaves unfinished ansi codes
+  # Sometimes docker compose pull leaves unfinished ansi codes
   echo
 fi
 
@@ -191,10 +188,6 @@ if [[ "$(plugin_read_config NO_CACHE "false")" == "true" ]] ; then
   build_params+=(--no-cache)
 fi
 
-if [[ "$(plugin_read_config BUILD_PARALLEL "false")" == "true" ]] ; then
-  build_params+=(--parallel)
-fi
-
 while read -r arg ; do
   [[ -n "${arg:-}" ]] && build_params+=("--build-arg" "${arg}")
 done <<< "$(plugin_read_list ARGS)"
@@ -209,11 +202,11 @@ elif [[ ! -f "$override_file" ]]; then
   echo "⚠️ No pre-built image found from a previous 'build' step for this service and config file. Building image..."
 
   # Ideally we'd do a pull with a retry first here, but we need the conditional pull behaviour here
-  # for when an image and a build is defined in the docker-compose.ymk file, otherwise we try and
+  # for when an image and a build is defined in the docker-compose.yml file, otherwise we try and
   # pull an image that doesn't exist
   run_docker_compose build "${build_params[@]}" "$run_service"
 
-  # Sometimes docker-compose pull leaves unfinished ansi codes
+  # Sometimes docker compose pull leaves unfinished ansi codes
   echo
 fi
 
@@ -226,7 +219,7 @@ if [[ "$(plugin_read_config DEPENDENCIES "true")" == "true" ]] ; then
     run_docker_compose up -d --scale "${run_service}=0" "${run_service}"
   fi
 
-  # Sometimes docker-compose leaves unfinished ansi codes
+  # Sometimes docker compose leaves unfinished ansi codes
   echo
 fi
 
@@ -301,8 +294,14 @@ if [[ ${#shell[@]} -gt 0 ]] ; then
 fi
 
 if [[ -n "${BUILDKITE_COMMAND}" ]] ; then
-  run_params+=("${BUILDKITE_COMMAND}")
-  display_command+=("'${BUILDKITE_COMMAND}'")
+  if [[ ${#shell[@]} -gt 0 ]] ; then
+    run_params+=("${BUILDKITE_COMMAND}")
+    display_command+=("'${BUILDKITE_COMMAND}'")
+  else
+    IFS=" " read -r -a command <<< "$BUILDKITE_COMMAND"
+    run_params+=("${command[@]}")
+    display_command+=("${BUILDKITE_COMMAND}")
+  fi
 elif [[ ${#command[@]} -gt 0 ]] ; then
   for command_arg in "${command[@]}" ; do
     run_params+=("$command_arg")

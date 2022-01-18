@@ -42,13 +42,12 @@ services:
       MYSQL_PASSWORD: blah
       MYSQL_ROOT_PASSWORD: blah
       MYSQL_USER: blah
-    image: mysql:5.6
+    image: mysql:5.7
     ports:
     - target: '3306'
     - published: '3306'
       target: '3306'
     volumes:
     - /home/blah/blah/db/blah.sql:/docker-entrypoint-initdb.d/blah.sql:rw
-version: '3.2'
 volumes: {}
 

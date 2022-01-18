@@ -5,7 +5,6 @@ load '../lib/shared'
 load '../lib/run'
 
 # export BUILDKITE_AGENT_STUB_DEBUG=/dev/tty
-# export DOCKER_COMPOSE_STUB_DEBUG=/dev/tty
 # export DOCKER_STUB_DEBUG=/dev/tty
 # export BATS_MOCK_TMPDIR=$PWD
 
@@ -27,12 +26,10 @@ load '../lib/run'
     "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
     "artifact upload : exit 0"
 
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
-    "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice"
-
   stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice" \
     "ps -a --filter label=com.docker.compose.project=buildkite1111 -q : cat tests/fixtures/id-multiple-services.txt" \
     "inspect -f {{if\ ne\ 0\ .State.ExitCode}}{{.Name}}.{{.State.ExitCode}}{{\ end\ }} 456456 : echo 456456.1" \
     "ps -a --filter label=com.docker.compose.project=buildkite1111 --format : cat tests/fixtures/service-id-exit-multiple-services-failed.txt" \
@@ -49,7 +46,6 @@ load '../lib/run'
   assert_output --partial "ran myservice"
   assert_output --partial "Some containers had non-zero exit codes"
   unstub buildkite-agent
-  unstub docker-compose
   unstub docker
 }
 
@@ -67,14 +63,12 @@ load '../lib/run'
 
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
-    "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice" \
     "ps -a --filter label=com.docker.compose.project=buildkite1111 -q : cat tests/fixtures/id-multiple-services.txt" \
     "inspect -f {{if\ ne\ 0\ .State.ExitCode}}{{.Name}}.{{.State.ExitCode}}{{\ end\ }} 456456 789789 : echo" \
     "ps -a --filter : cat tests/fixtures/id-service-multiple-services.txt" \
@@ -88,7 +82,6 @@ load '../lib/run'
   assert_output --partial "ran myservice"
   refute_output --partial "Some containers had non-zero exit codes"
   unstub docker
-  unstub docker-compose
   unstub buildkite-agent
 }
 
@@ -109,14 +102,12 @@ load '../lib/run'
 
 
   stub buildkite-agent \
-    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1" \
-
-  stub docker-compose \
-    "-f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
-    "-f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
-    "-f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice"
+    "meta-data exists docker-compose-plugin-built-image-tag-myservice : exit 1"
 
   stub docker \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
+    "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice echo 'hello world' : echo ran myservice" \
     "ps -a --filter label=com.docker.compose.project=buildkite1111 -q : echo" \
     "ps -a --filter : cat tests/fixtures/id-service-no-services.txt"
 
@@ -127,6 +118,5 @@ load '../lib/run'
   assert_output --partial "ran myservice"
   refute_output --partial "Uploading linked container logs"
   unstub docker
-  unstub docker-compose
   unstub buildkite-agent
 }

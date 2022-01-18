@@ -6,6 +6,32 @@ pull_retries="$(plugin_read_config PULL_RETRIES "0")"
 push_retries="$(plugin_read_config PUSH_RETRIES "0")"
 override_file="docker-compose.buildkite-${BUILDKITE_BUILD_NUMBER}-override.yml"
 build_images=()
+run_params=()
+display_command=()
+
+if [[ -n "${BUILDKITE_COMMAND:-}" ]] ; then
+  IFS=" " read -r -a command <<< "$BUILDKITE_COMMAND"
+  run_params+=("${command[@]}")
+  display_command+=("${BUILDKITE_COMMAND}")
+
+  set +e
+
+  (
+    echo "+++ Running ${display_command[*]:-} before building" >&2
+    "${run_params[@]}"
+  )
+
+
+  exitcode=$?
+
+  set -e
+
+  if [[ $exitcode -ne 0 ]] ; then
+    echo "^^^ +++"
+    echo "+++ :warning: Failed to run command, exited with $exitcode, run params:"
+    echo "${run_params[@]}"
+  fi
+fi
 
 service_name_cache_from_var() {
   local service_name="$1"
@@ -62,7 +88,7 @@ for service_name in $(plugin_read_list BUILD) ; do
 done
 
 if [[ ${#build_images[@]} -gt 0 ]] ; then
-  echo "~~~ :docker: Creating a modified docker-compose config"
+  echo "~~~ :docker: Creating a modified docker compose config"
   build_image_override_file "${build_images[@]}" | tee "$override_file"
 fi
 
@@ -79,10 +105,6 @@ if [[ "$(plugin_read_config NO_CACHE "false")" == "true" ]] ; then
   build_params+=(--no-cache)
 fi
 
-if [[ "$(plugin_read_config BUILD_PARALLEL "false")" == "true" ]] ; then
-  build_params+=(--parallel)
-fi
-
 while read -r arg ; do
   [[ -n "${arg:-}" ]] && build_params+=("--build-arg" "${arg}")
 done <<< "$(plugin_read_list ARGS)"
@@ -92,10 +114,11 @@ run_docker_compose -f "$override_file" build "${build_params[@]}" "${services[@]
 
 if [[ -n "$image_repository" ]] ; then
   echo "~~~ :docker: Pushing built images to $image_repository"
-  retry "$push_retries" run_docker_compose -f "$override_file" push "${services[@]}"
 
   # iterate over build images
   while [[ ${#build_images[@]} -gt 0 ]] ; do
+    retry "$push_retries" plugin_prompt_and_run docker push "${build_images[1]}"
+
     set_prebuilt_image "${build_images[0]}" "${build_images[1]}"
 
     # set aliases

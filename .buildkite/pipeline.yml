@@ -12,16 +12,22 @@ steps:
           - hooks/**
           - lib/**
           - commands/**
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: ":sparkles: Lint"
     plugins:
       plugin-linter#v2.0.0:
         id: docker-compose
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: ":bash: Tests"
     plugins:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
         run: tests
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   # The rest of the steps are integration tests
 
@@ -31,6 +37,16 @@ steps:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
         run: alpinewithfailinglink
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
+
+  - label: wrap_command, with links that fail
+    command: tests/scripts/wrap_with_failure.sh
+    plugins:
+      ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
+        wrap_command: true
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run, with environment
     plugins:
@@ -39,6 +55,8 @@ steps:
         config: tests/composefiles/docker-compose.v2.1.yml
         environment:
           - ALPACAS=sometimes
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run, with multi-line command
     command: |
@@ -49,6 +67,8 @@ steps:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
         run: alpinewithenv
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: prebuild with v2.0
     key: prebuild-2-0
@@ -60,6 +80,8 @@ steps:
         build: helloworld
         image-repository: "$IMAGE_REPO"
         config: tests/composefiles/docker-compose.v2.0.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run after build with v2.0
     depends_on: prebuild-2-0
@@ -71,6 +93,8 @@ steps:
         require-prebuild: true
         config: tests/composefiles/docker-compose.v2.0.yml
         command: ["/hello"]
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: prebuild with v2.1
     key: prebuild-2-1
@@ -82,6 +106,8 @@ steps:
         build: helloworld
         image-repository: "$IMAGE_REPO"
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run with default command
     depends_on: prebuild-2-1
@@ -91,6 +117,8 @@ steps:
       ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
         run: helloworld
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: prebuild, where service has build and image-repo
     key: prebuild-2-1-build-image-repo
@@ -102,6 +130,8 @@ steps:
         image-repository: "$IMAGE_REPO"
         config: tests/composefiles/docker-compose.v2.1.yml
         commmand: ["/hello"]
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run after prebuild
     depends_on: prebuild-2-1-build-image-repo
@@ -113,6 +143,22 @@ steps:
         require-prebuild: true
         config: tests/composefiles/docker-compose.v2.1.yml
         commmand: ["/hello"]
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
+
+  - label: wrap_command after prebuild
+    depends_on: prebuild-2-1-build-image-repo
+    env:
+      RESTORE_REGISTRY_FROM: prebuild-2-1-build-image-repo
+    command: tests/scripts/hello_world.sh
+    plugins:
+      ${BUILDKITE_PULL_REQUEST_REPO:-$BUILDKITE_REPO}#${BUILDKITE_COMMIT}:
+        wrap_command: true
+        pull: helloworldimage
+        config: tests/composefiles/docker-compose.v2.1.yml
+        require-prebuild: true
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: prebuild with custom image-name
     key: prebuild-custom-image-name
@@ -124,6 +170,8 @@ steps:
         image-repository: "$IMAGE_REPO"
         image-name: llamas-build-${BUILDKITE_BUILD_NUMBER}
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: run after prebuild with custom image-name
     depends_on: prebuild-custom-image-name
@@ -135,6 +183,8 @@ steps:
         require-prebuild: true
         config: tests/composefiles/docker-compose.v2.1.yml
         commmand: ["/hello"]
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs
 
   - label: push after build with custom image-name
     depends_on: prebuild-custom-image-name
@@ -145,3 +195,5 @@ steps:
         push: helloworld
         image-name: llamas-build-${BUILDKITE_BUILD_NUMBER}
         config: tests/composefiles/docker-compose.v2.1.yml
+    concurrency: 1
+    concurrency_group: docker-compose-buildkite-plugin/registry-specs

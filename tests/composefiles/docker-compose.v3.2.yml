@@ -1,5 +1,3 @@
-version: "3.2"
-
 services:
   helloworld:
     environment:
@@ -11,7 +9,7 @@ services:
     build: .
 
   alpinewithenv:
-    image: alpine:3.3
+    image: alpine:3.15
     environment:
       - LLAMAS=${MISSING_VARIABLE:-always}
     volumes:
@@ -19,11 +17,11 @@ services:
     command: /scripts/test_env.sh
 
   alpinewithfailinglink:
-    image: alpine:3.3
+    image: alpine:3.15
     command: echo hello from alpine
     links:
       - fail
 
   fail:
-    image: alpine:3.3
+    image: alpine:3.15
     command: sh -c "echo failing on purpose, expect exit 1; exit 1"

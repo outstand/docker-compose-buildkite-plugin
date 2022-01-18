@@ -3,7 +3,6 @@ description: Run any CI step in isolated Docker containers using Docker Compose
 author: https://github.com/buildkite
 requirements:
   - docker
-  - docker-compose
 configuration:
   properties:
     run:
@@ -70,12 +69,17 @@ configuration:
       type: boolean
     upload-container-logs:
       type: string
+    always-upload:
+      type: [ string, array ]
+      minimum: 1
     propagate-uid-gid:
       type: boolean
     mount-buildkite-agent:
       type: boolean
     entrypoint:
       type: string
+    wrap_command:
+      type: boolean
   oneOf:
     - required:
       - run
@@ -83,6 +87,8 @@ configuration:
       - build
     - required:
       - push
+    - required:
+      - wrap_command
   additionalProperties: false
   dependencies:
     pull: [ run ]
