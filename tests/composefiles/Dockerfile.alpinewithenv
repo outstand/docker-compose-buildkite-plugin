@@ -1,0 +1,2 @@
+FROM alpine:3.15
+COPY tests/scripts/test_env.sh /scripts/test_env.sh

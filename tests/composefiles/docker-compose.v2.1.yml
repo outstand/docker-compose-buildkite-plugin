@@ -9,11 +9,11 @@ services:
     build: .
 
   alpinewithenv:
-    image: alpine:3.15
+    build:
+      context: ../..
+      dockerfile: tests/composefiles/Dockerfile.alpinewithenv
     environment:
       - LLAMAS=${MISSING_VARIABLE:-always}
-    volumes:
-      - ../../tests/scripts:/scripts:ro
     command: /scripts/test_env.sh
 
   alpinewithfailinglink:
