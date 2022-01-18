@@ -728,7 +728,7 @@ export BUILDKITE_JOB_ID=1111
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CLEANUP=false
 
   stub docker \
-    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml pull --parallel myservice1 myservice2 : echo pulled myservice1 and myservice2" \
+    "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml pull myservice1 myservice2 : echo pulled myservice1 and myservice2" \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml up -d --scale myservice1=0 myservice1 : echo started dependencies for myservice1" \
     "compose -f docker-compose.yml -p buildkite1111 -f docker-compose.buildkite-1-override.yml run --name buildkite1111_myservice1_build_1 --rm myservice1 /bin/sh -e -c 'pwd' : echo ran myservice1"
 
@@ -893,10 +893,9 @@ export BUILDKITE_JOB_ID=1111
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CHECK_LINKED_CONTAINERS=false
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_CLEANUP=false
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_NO_CACHE=true
-  export BUILDKITE_PLUGIN_DOCKER_COMPOSE_BUILD_PARALLEL=true
 
   stub docker \
-    "compose -f docker-compose.yml -p buildkite1111 build --pull --no-cache --parallel myservice : echo built myservice" \
+    "compose -f docker-compose.yml -p buildkite1111 build --pull --no-cache myservice : echo built myservice" \
     "compose -f docker-compose.yml -p buildkite1111 up -d --scale myservice=0 : echo ran myservice dependencies" \
     "compose -f docker-compose.yml -p buildkite1111 run --name buildkite1111_myservice_build_1 --rm myservice /bin/sh -e -c 'echo hello world' : echo ran myservice"
 

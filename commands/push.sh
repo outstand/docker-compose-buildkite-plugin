@@ -10,8 +10,8 @@ push_retries="$(plugin_read_config PUSH_RETRIES "0")"
 # service:image:tag <- a service name and a specific image and tag to use
 
 # A push figures out the source image from either:
-# 1. An image declaration in the docker-compose config for that service
-# 2. The default projectname_service image format that docker-compose uses
+# 1. An image declaration in the docker compose config for that service
+# 2. The default projectname_service image format that docker compose uses
 
 pulled_services=("")
 

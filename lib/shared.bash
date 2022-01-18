@@ -80,7 +80,7 @@ function plugin_read_list_into_result() {
 
 # Returns the name of the docker compose project for this build
 function docker_compose_project_name() {
-  # No dashes or underscores because docker-compose will remove them anyways
+  # No dashes or underscores because docker compose will remove them anyways
   echo "buildkite${BUILDKITE_JOB_ID//-}"
 }
 
@@ -112,7 +112,7 @@ function docker_compose_config_files() {
   done
 }
 
-# Build an docker-compose file that overrides the image for a
+# Build an docker compose file that overrides the image for a
 # set of [ service, image, cache_from ] tuples
 function build_image_override_file() {
   printf "services:\\n"
@@ -131,7 +131,7 @@ function build_image_override_file() {
   done
 }
 
-# Runs the docker-compose command, scoped to the project, with the given arguments
+# Runs the docker compose command, scoped to the project, with the given arguments
 function run_docker_compose() {
   local command=(docker compose)
 

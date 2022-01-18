@@ -56,11 +56,8 @@ if [[ ${#prebuilt_services[@]} -gt 0 ]] ; then
   export BUILDKITE_PLUGIN_DOCKER_COMPOSE_OVERRIDE_FILE=$override_file
 fi
 
-# If there are multiple services to pull, run it in parallel (although this is now the default)
-if [[ ${#pull_services[@]} -gt 1 ]] ; then
-  pull_params+=("pull" "--parallel" "${pull_services[@]}")
-elif [[ ${#pull_services[@]} -eq 1 ]] ; then
-  pull_params+=("pull" "${pull_services[0]}")
+if [[ ${#pull_services[@]} -gt 0 ]] ; then
+  pull_params+=("pull" "${pull_services[@]}")
 fi
 
 # Pull down specified services
@@ -68,7 +65,7 @@ if [[ ${#pull_services[@]} -gt 0 ]] ; then
   echo "~~~ :docker: Pulling services ${pull_services[0]}"
   retry "$pull_retries" run_docker_compose "${pull_params[@]}"
 
-  # Sometimes docker-compose pull leaves unfinished ansi codes
+  # Sometimes docker compose pull leaves unfinished ansi codes
   echo
 fi
 

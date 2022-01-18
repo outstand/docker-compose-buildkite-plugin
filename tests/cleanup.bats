@@ -24,6 +24,6 @@ load '../lib/run'
   run $PWD/hooks/pre-exit
 
   assert_success
-  assert_output --partial "Cleaning up after docker-compose"
+  assert_output --partial "Cleaning up after docker compose"
   unstub docker
 }

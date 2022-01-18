@@ -23,7 +23,7 @@ function plugin_set_metadata() {
   plugin_prompt_and_must_run buildkite-agent meta-data set "$key" "$value"
 }
 
-# The service name, and the docker-compose config files, are the uniqueness key
+# The service name, and the docker compose config files, are the uniqueness key
 # for the pre-built image meta-data tag
 function prebuilt_image_meta_data_key() {
   local service="$1"

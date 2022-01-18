@@ -9,7 +9,7 @@ A [Buildkite plugin](https://buildkite.com/docs/agent/v3/plugins) that lets you 
 
 ## Example
 
-The following pipeline will run `test.sh` inside a `app` service container using Docker Compose, the equivalent to running `docker-compose run app test.sh`:
+The following pipeline will run `test.sh` inside a `app` service container using Docker Compose, the equivalent to running `docker compose run app test.sh`:
 
 ```yml
 steps:
@@ -77,7 +77,7 @@ steps:
           run: app
 ```
 
-If you want to control how your command is passed to docker-compose, you can use the command parameter on the plugin directly:
+If you want to control how your command is passed to docker compose, you can use the command parameter on the plugin directly:
 
 ```yml
 steps:
@@ -124,11 +124,11 @@ steps:
 
 ## Environment
 
-By default, docker-compose makes whatever environment variables it gets available for
+By default, docker compose makes whatever environment variables it gets available for
 interpolation of docker-compose.yml, but it doesn't pass them in to your containers.
 
 You can use the [environment key in docker-compose.yml](https://docs.docker.com/compose/environment-variables/) to either set specific environment vars or "pass through" environment
-variables from outside docker-compose.
+variables from outside docker compose.
 
 If you want to add extra environment above what is declared in your `docker-compose.yml`,
 this plugin offers a `environment` block of it's own:
@@ -218,7 +218,7 @@ steps:
 
 ## Pushing Tagged Images
 
-If you want to push your Docker images ready for deployment, you can use the `push` configuration (which operates similar to [docker-compose push](https://docs.docker.com/compose/reference/push/):
+If you want to push your Docker images ready for deployment, you can use the `push` configuration (which operates similar to [docker compose push](https://docs.docker.com/compose/reference/push/):
 
 ```yml
 steps:
@@ -299,11 +299,11 @@ Either a single service or multiple services can be provided as an array.
 
 ### `run`
 
-The name of the service the command should be run within. If the docker-compose command would usually be `docker-compose run app test.sh` then the value would be `app`.
+The name of the service the command should be run within. If the docker compose command would usually be `docker compose run app test.sh` then the value would be `app`.
 
 ### `push`
 
-A list of services to push in the format `service:image:tag`. If an image has been pre-built with the build step, that image will be re-tagged, otherwise docker-compose's built in push operation will be used.
+A list of services to push in the format `service:image:tag`. If an image has been pre-built with the build step, that image will be re-tagged, otherwise docker compose's built in push operation will be used.
 
 ### `pull` (optional, run only)
 
@@ -329,7 +329,7 @@ The name to use when tagging pre-built images. If multiple images are built in t
 
 ### `build-alias` (optional, build only)
 
-Other docker-compose services that should be aliased to the main service that was built. This is for when different docker-compose services share the same prebuilt image.
+Other docker compose services that should be aliased to the main service that was built. This is for when different docker compose services share the same prebuilt image.
 
 ### `args` (optional, build and run only)
 
@@ -349,7 +349,7 @@ Examples: `[ "/bin/mycommand", "-c", "test" ]`, `["arg1", "arg2"]`
 
 ### `shell` (optional, run only, array or boolean)
 
-Set the shell to use for the command. Set it to `false` to pass the command directly to the `docker-compose run` command. The default is `["/bin/sh", "-e", "-c"]` unless you have provided a `command`.
+Set the shell to use for the command. Set it to `false` to pass the command directly to the `docker compose run` command. The default is `["/bin/sh", "-e", "-c"]` unless you have provided a `command`.
 
 Example: `[ "powershell", "-Command" ]`
 
@@ -359,11 +359,11 @@ Whether to skip the repository checkout phase. This is useful for steps that use
 
 ### `workdir` (optional, run only)
 
-Specify the container working directory via `docker-compose run --workdir`.
+Specify the container working directory via `docker compose run --workdir`.
 
 ### `user` (optional, run only)
 
-Run as specified username or uid via `docker-compose run --user`.
+Run as specified username or uid via `docker compose run --user`.
 
 ### `propagate-uid-gid` (optional, run-only, boolean)
 
@@ -391,7 +391,7 @@ This option can also be configured on the agent machine using the environment va
 
 ### `cache-from` (optional, build only)
 
-A list of images to pull caches from in the format `service:index.docker.io/myorg/myrepo/myapp:tag` before building, ignoring any failures. If multiple images are listed for a service, the first one to successfully pull will be used. Requires docker-compose file version `3.2+`.
+A list of images to pull caches from in the format `service:index.docker.io/myorg/myrepo/myapp:tag` before building, ignoring any failures. If multiple images are listed for a service, the first one to successfully pull will be used.
 
 ### `volumes` (optional, run only)
 
@@ -401,7 +401,7 @@ Additionally, volumes may be specified via the agent environment variable `BUILD
 
 ### `graceful-shutdown` (optional, run only)
 
-Gracefully shuts down all containers via 'docker-compose stop`.
+Gracefully shuts down all containers via 'docker compose stop`.
 
 The default is `false`.
 
@@ -414,12 +414,6 @@ The default is `false`.
 ### `no-cache` (optional, build and run only)
 
 Build with `--no-cache`, causing Docker Compose to not use any caches when building the image.
-
-The default is `false`.
-
-### `build-parallel` (optional, build and run only)
-
-Build with `--parallel`, causing Docker Compose to run builds in parallel. Requires docker-compose `1.23+`.
 
 The default is `false`.
 
@@ -449,19 +443,19 @@ The default is `false`.
 
 ### `verbose` (optional)
 
-Sets `docker-compose` to run with `--verbose`
+Sets `docker compose` to run with `--verbose`
 
 The default is `false`.
 
 ### `rm` (optional, run only)
 
-If set to true, docker compose will remove the primary container after run. Equivalent to `--rm` in docker-compose.
+If set to true, docker compose will remove the primary container after run. Equivalent to `--rm` in docker compose.
 
 The default is `true`.
 
 ### `entrypoint` (optional, run only)
 
-Sets the `--entrypoint` argument when running `docker-compose`.
+Sets the `--entrypoint` argument when running `docker compose`.
 
 ### `upload-container-logs` (optional, run only)
 
@@ -478,7 +472,7 @@ The default is `on-error`.
 To run the tests:
 
 ```bash
-docker-compose run --rm tests
+docker compose run --rm tests
 ```
 
 ## License

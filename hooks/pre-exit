@@ -14,6 +14,6 @@ if [[ -n "$(plugin_read_list RUN)$(plugin_read_list WRAP_COMMAND)" ]] && [[ "$(p
   # shellcheck source=lib/run.bash
   . "$DIR/../lib/run.bash"
 
-  echo "~~~ :docker: Cleaning up after docker-compose" >&2
+  echo "~~~ :docker: Cleaning up after docker compose" >&2
   compose_cleanup
 fi
